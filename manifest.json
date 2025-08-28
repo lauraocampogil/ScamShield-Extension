@@ -22,7 +22,7 @@
 	],
 
 	"side_panel": {
-		"default_path": "sidepanel/sidepanel.html"
+		"default_path": "popup/popup.html"
 	},
 
 	"action": {
