@@ -1,0 +1,38 @@
+{
+	"manifest_version": 3,
+	"name": "ScamShield - AI Job Scam Detector",
+	"version": "1.0.0",
+	"description": "Protect your job search with AI that detects scams in real time",
+
+	"permissions": ["activeTab", "storage", "background", "scripting", "sidePanel"],
+
+	"host_permissions": ["https://linkedin.com/*", "https://indeed.com/*", "https://glassdoor.com/*", "https://ziprecruiter.com/*", "https://api.scamshield.com/*"],
+
+	"background": {
+		"service_worker": "background/background.js"
+	},
+
+	"content_scripts": [
+		{
+			"matches": ["https://linkedin.com/*", "https://indeed.com/*", "https://glassdoor.com/*", "https://ziprecruiter.com/*"],
+			"js": ["content/content.js"],
+			"css": ["content/content.css"],
+			"run_at": "document_end"
+		}
+	],
+
+	"side_panel": {
+		"default_path": "sidepanel/sidepanel.html"
+	},
+
+	"action": {
+		"default_title": "Open ScamShield"
+	},
+
+	"icons": {
+		"16": "assets/icons/icon16.png",
+		"32": "assets/icons/icon32.png",
+		"48": "assets/icons/icon48.png",
+		"128": "assets/icons/icon128.png"
+	}
+}

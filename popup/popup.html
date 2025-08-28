@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="es">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>ScamShield</title>
+		<link rel="stylesheet" href="sidepanel.css" />
+	</head>
+	<body>
+		<div id="app">
+			<!-- Header con logo y estado -->
+			<header class="header">
+				<div class="header-content">
+					<div class="logo">
+						<span class="shield-icon">🛡️</span>
+						<div class="logo-text">
+							<h1>ScamShield</h1>
+							<span class="tagline">AI Job Protection</span>
+						</div>
+					</div>
+					<div class="status" id="status">
+						<div class="status-indicator" id="statusIndicator"></div>
+						<span id="statusText">Cargando...</span>
+					</div>
+				</div>
+			</header>
+
+			<!-- Current Page Info -->
+			<section class="current-page" id="currentPageSection">
+				<div class="page-info">
+					<div class="site-icon" id="siteIcon">🌐</div>
+					<div class="site-details">
+						<h3 id="siteName">Detectando sitio...</h3>
+						<p id="pageStatus">Analizando página actual</p>
+					</div>
+					<button class="scan-btn" id="scanBtn">
+						<span id="scanBtnIcon">🔄</span>
+						<span id="scanBtnText">Escanear</span>
+					</button>
+				</div>
+			</section>
+
+			<!-- Quick Stats -->
+			<section class="stats-section">
+				<div class="stats-grid">
+					<div class="stat-card highlight">
+						<div class="stat-icon">🚫</div>
+						<div class="stat-content">
+							<div class="stat-value" id="scamsBlocked">0</div>
+							<div class="stat-label">Estafas Bloqueadas</div>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">🔍</div>
+						<div class="stat-content">
+							<div class="stat-value" id="jobsScanned">0</div>
+							<div class="stat-label">Trabajos Analizados</div>
+						</div>
+					</div>
+					<div class="stat-card">
+						<div class="stat-icon">⏰</div>
+						<div class="stat-content">
+							<div class="stat-value" id="timeSaved">0min</div>
+							<div class="stat-label">Tiempo Ahorrado</div>
+						</div>
+					</div>
+				</div>
+			</section>
+
+			<!-- Real-time Activity Feed -->
+			<section class="activity-section">
+				<div class="section-header">
+					<h2>
+						<span class="section-icon">📊</span>
+						Actividad en Tiempo Real
+					</h2>
+					<button class="toggle-btn" id="activityToggle">
+						<span>▼</span>
+					</button>
+				</div>
+				<div class="activity-feed" id="activityFeed">
+					<div class="activity-placeholder">
+						<div class="placeholder-icon">👁️</div>
+						<p>Navega a LinkedIn, Indeed o similar para ver actividad</p>
+						<small>ScamShield analizará automáticamente las ofertas de trabajo</small>
+					</div>
+				</div>
+			</section>
+
+			<!-- Recent Detections -->
+			<section class="detections-section">
+				<div class="section-header">
+					<h2>
+						<span class="section-icon">🕵️</span>
+						Detecciones Recientes
+						<span class="badge" id="detectionsBadge">0</span>
+					</h2>
+					<button class="clear-btn" id="clearDetections">Limpiar</button>
+				</div>
+				<div class="detections-list" id="detectionsList">
+					<!-- Se llena dinámicamente -->
+				</div>
+			</section>
+
+			<!-- Quick Actions -->
+			<section class="actions-section">
+				<div class="section-header">
+					<h2>
+						<span class="section-icon">⚡</span>
+						Acciones Rápidas
+					</h2>
+				</div>
+				<div class="actions-grid">
+					<button class="action-card" id="reportScamBtn">
+						<div class="action-icon">⚠️</div>
+						<div class="action-content">
+							<h3>Reportar Estafa</h3>
+							<p>Ayuda a la comunidad</p>
+						</div>
+					</button>
+					<button class="action-card" id="viewStatsBtn">
+						<div class="action-icon">📈</div>
+						<div class="action-content">
+							<h3>Ver Estadísticas</h3>
+							<p>Análisis detallado</p>
+						</div>
+					</button>
+					<button class="action-card" id="settingsBtn">
+						<div class="action-icon">⚙️</div>
+						<div class="action-content">
+							<h3>Configuración</h3>
+							<p>Personalizar alertas</p>
+						</div>
+					</button>
+					<button class="action-card" id="helpBtn">
+						<div class="action-icon">❓</div>
+						<div class="action-content">
+							<h3>Ayuda</h3>
+							<p>Guías y FAQ</p>
+						</div>
+					</button>
+				</div>
+			</section>
+
+			<!-- Settings Panel (Collapsible) -->
+			<section class="settings-section collapsed" id="settingsSection">
+				<div class="section-header">
+					<h2>
+						<span class="section-icon">⚙️</span>
+						Configuración
+					</h2>
+					<button class="toggle-btn" id="settingsToggle">
+						<span>▶</span>
+					</button>
+				</div>
+				<div class="settings-content" id="settingsContent">
+					<div class="setting-group">
+						<label class="setting-item">
+							<input type="checkbox" id="enableBadges" checked />
+							<span class="setting-label">Mostrar badges en trabajos</span>
+							<span class="setting-description">Badges visuales de riesgo en las ofertas</span>
+						</label>
+					</div>
+
+					<div class="setting-group">
+						<label class="setting-label">Nivel de sensibilidad</label>
+						<select id="sensitivityLevel" class="setting-select">
+							<option value="low">Bajo - Solo estafas obvias</option>
+							<option value="medium" selected>Medio - Balance recomendado</option>
+							<option value="high">Alto - Máxima protección</option>
+						</select>
+					</div>
+
+					<div class="setting-group">
+						<label class="setting-item">
+							<input type="checkbox" id="enableNotifications" checked />
+							<span class="setting-label">Notificaciones push</span>
+							<span class="setting-description">Alertas cuando se detectan estafas</span>
+						</label>
+					</div>
+
+					<div class="setting-group">
+						<label class="setting-item">
+							<input type="checkbox" id="autoScan" checked />
+							<span class="setting-label">Escaneo automático</span>
+							<span class="setting-description">Analizar trabajos automáticamente</span>
+						</label>
+					</div>
+				</div>
+			</section>
+
+			<!-- Upgrade Prompt -->
+			<section class="upgrade-section" id="upgradeSection">
+				<div class="upgrade-content">
+					<div class="upgrade-icon">💎</div>
+					<h3>Desbloquea Todo el Potencial</h3>
+					<p>Análisis ilimitados, alertas avanzadas y reportes detallados</p>
+					<div class="upgrade-features">
+						<span class="feature">✓ Análisis ilimitados</span>
+						<span class="feature">✓ Reportes avanzados</span>
+						<span class="feature">✓ Soporte prioritario</span>
+					</div>
+					<button class="upgrade-btn" id="upgradeBtn">Actualizar a Pro - $9/mes</button>
+					<small class="upgrade-trial">Prueba gratis por 7 días</small>
+				</div>
+			</section>
+
+			<!-- Footer -->
+			<footer class="footer">
+				<div class="footer-links">
+					<a href="#" id="privacyLink">Privacidad</a>
+					<a href="#" id="termsLink">Términos</a>
+					<a href="#" id="feedbackLink">Feedback</a>
+				</div>
+				<div class="footer-info">
+					<small>v1.0.0 • Hecho con ❤️ para proteger tu carrera</small>
+				</div>
+			</footer>
+		</div>
+
+		<!-- Loading Overlay -->
+		<div id="loadingOverlay" class="loading-overlay hidden">
+			<div class="loading-spinner"></div>
+			<p>Analizando con IA...</p>
+		</div>
+
+		<!-- Modal para análisis detallado -->
+		<div id="analysisModal" class="modal hidden">
+			<div class="modal-overlay"></div>
+			<div class="modal-content">
+				<div class="modal-header">
+					<h3>Análisis Detallado</h3>
+					<button class="modal-close" id="closeModal">&times;</button>
+				</div>
+				<div class="modal-body" id="modalBody">
+					<!-- Contenido dinámico -->
+				</div>
+			</div>
+		</div>
+
+		<script src="sidepanel.js"></script>
+	</body>
+</html>
