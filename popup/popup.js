@@ -12,7 +12,7 @@ class ScamShieldSidepanel {
 	}
 
 	async init() {
-		console.log("🛡️ ScamShield Sidepanel inicializado");
+		console.log("🛡️ ScamShield initialized");
 
 		await this.loadInitialData();
 		this.setupEventListeners();
@@ -35,7 +35,7 @@ class ScamShieldSidepanel {
 				this.currentTab = response.currentTab;
 			}
 		} catch (error) {
-			console.error("Error cargando datos iniciales:", error);
+			console.error("Error loading initial data:", error);
 		}
 	}
 
@@ -157,8 +157,8 @@ class ScamShieldSidepanel {
 		this.stats = data.stats;
 		this.addActivityItem({
 			type: "scanning",
-			title: "Trabajo detectado",
-			description: `Analizando: ${data.jobData.title || "Oferta laboral"}`,
+			title: "Work detected",
+			description: `Analyzing: ${data.jobData.title || "Job offer"}`,
 			timestamp: Date.now(),
 		});
 		this.updateStats();
@@ -177,8 +177,8 @@ class ScamShieldSidepanel {
 
 		this.addActivityItem({
 			type: riskLevel,
-			title: "Análisis completado",
-			description: `${data.analysis.jobTitle || "Trabajo"} - ${this.getRiskText(riskLevel)}`,
+			title: "Analysis completed",
+			description: `${data.analysis.jobTitle || "Job"} - ${this.getRiskText(riskLevel)}`,
 			timestamp: Date.now(),
 		});
 
@@ -218,10 +218,10 @@ class ScamShieldSidepanel {
 
 		if (!this.currentTab) {
 			siteIcon.textContent = "🌐";
-			siteName.textContent = "Detectando sitio...";
-			pageStatus.textContent = "Cargando información de la página";
+			siteName.textContent = "Detecting site...";
+			pageStatus.textContent = "Loading page information";
 			statusIndicator.className = "status-indicator";
-			statusText.textContent = "Cargando...";
+			statusText.textContent = "Charging...";
 			return;
 		}
 
@@ -230,25 +230,25 @@ class ScamShieldSidepanel {
 		siteName.textContent = siteInfo.name;
 
 		if (this.currentTab.isSupported) {
-			pageStatus.textContent = `Protección activa en ${siteInfo.name}`;
+			pageStatus.textContent = `Active protection in ${siteInfo.name}`;
 			statusIndicator.className = "status-indicator active";
-			statusText.textContent = "Activo";
+			statusText.textContent = "Asset";
 		} else {
-			pageStatus.textContent = "Sitio no compatible";
+			pageStatus.textContent = "Site not supported";
 			statusIndicator.className = "status-indicator inactive";
-			statusText.textContent = "Inactivo";
+			statusText.textContent = "Inactive";
 		}
 	}
 
 	getSiteInfo(url) {
-		if (!url) return { name: "Página desconocida", icon: "🌐" };
+		if (!url) return { name: "Unknown page", icon: "🌐" };
 
 		if (url.includes("linkedin.com")) return { name: "LinkedIn", icon: "💼" };
 		if (url.includes("indeed.com")) return { name: "Indeed", icon: "🔍" };
 		if (url.includes("glassdoor.com")) return { name: "Glassdoor", icon: "🏢" };
 		if (url.includes("ziprecruiter.com")) return { name: "ZipRecruiter", icon: "📋" };
 
-		return { name: "Página web", icon: "🌐" };
+		return { name: "Web page", icon: "🌐" };
 	}
 
 	updateStats() {
@@ -267,8 +267,8 @@ class ScamShieldSidepanel {
 			container.innerHTML = `
         <div class="activity-placeholder">
           <div class="placeholder-icon">🛡️</div>
-          <p>No hay detecciones recientes</p>
-          <small>ScamShield te alertará cuando detecte trabajos sospechosos</small>
+          <p>No recent detections</p>
+          <small>ScamShield will alert you when it detects suspicious work</small>
         </div>
       `;
 			return;
@@ -285,8 +285,8 @@ class ScamShieldSidepanel {
         <div class="detection-item risk-${riskLevel}" onclick="sidepanel.showDetailedAnalysis('${analysis.id}')">
           <div class="detection-icon">${riskIcon}</div>
           <div class="detection-info">
-            <div class="job-title">${analysis.jobTitle || "Trabajo analizado"}</div>
-            <div class="company-name">${analysis.company || "Empresa desconocida"}</div>
+            <div class="job-title">${analysis.jobTitle || "Work analyzed"}</div>
+            <div class="company-name">${analysis.company || "Unknown company"}</div>
             <div class="detection-meta">
               <span class="risk-level ${riskLevel}">${this.getRiskText(riskLevel)}</span>
               <span class="time-ago">${timeAgo}</span>
@@ -305,8 +305,8 @@ class ScamShieldSidepanel {
 			container.innerHTML = `
         <div class="activity-placeholder">
           <div class="placeholder-icon">👁️</div>
-          <p>Navega a LinkedIn, Indeed o similar para ver actividad</p>
-          <small>ScamShield analizará automáticamente las ofertas de trabajo</small>
+          <p>Navigate to LinkedIn, Indeed or similar to view activity</p>
+          <small>ScamShield will automatically analyze job offers</small>
         </div>
       `;
 			return;
@@ -348,14 +348,14 @@ class ScamShieldSidepanel {
 		this.isScanning = true;
 		scanBtn.disabled = true;
 		scanBtnIcon.className = "loading";
-		scanBtnText.textContent = "Escaneando...";
+		scanBtnText.textContent = "Scanning...";
 
 		try {
 			// Obtener pestaña activa
 			const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
 
 			if (!tab) {
-				throw new Error("No se pudo obtener la pestaña activa");
+				throw new Error("Could not get the active tab");
 			}
 
 			// Enviar mensaje al content script
@@ -365,8 +365,8 @@ class ScamShieldSidepanel {
 
 			this.addActivityItem({
 				type: "scanning",
-				title: "Escaneo manual iniciado",
-				description: "Analizando página actual...",
+				title: "Manual scan started",
+				description: "Analyzing current page...",
 				timestamp: Date.now(),
 			});
 
@@ -375,17 +375,17 @@ class ScamShieldSidepanel {
 
 			this.addActivityItem({
 				type: "safe",
-				title: "Escaneo completado",
-				description: "Página analizada exitosamente",
+				title: "Scanning completed",
+				description: "Page successfully scanned",
 				timestamp: Date.now(),
 			});
 		} catch (error) {
-			console.error("Error escaneando página:", error);
+			console.error("Error scanning page:", error);
 
 			this.addActivityItem({
 				type: "warning",
-				title: "Error en escaneo",
-				description: error.message || "No se pudo escanear la página",
+				title: "Scanning error",
+				description: error.message || "The page could not be scanned.",
 				timestamp: Date.now(),
 			});
 		} finally {
@@ -393,7 +393,7 @@ class ScamShieldSidepanel {
 			scanBtn.disabled = false;
 			scanBtnIcon.className = "";
 			scanBtnIcon.textContent = "🔄";
-			scanBtnText.textContent = "Escanear";
+			scanBtnText.textContent = "Scan";
 		}
 	}
 
@@ -409,10 +409,10 @@ class ScamShieldSidepanel {
 				settings: this.settings,
 			});
 
-			this.showNotification("Configuración actualizada", "success");
+			this.showNotification("Updated configuration", "success");
 		} catch (error) {
-			console.error("Error actualizando configuración:", error);
-			this.showNotification("Error actualizando configuración", "error");
+			console.error("Error updating configuration:", error);
+			this.showNotification("Error updating configuration", "error");
 		}
 	}
 
@@ -458,15 +458,15 @@ class ScamShieldSidepanel {
       </div>
 
       <div class="analysis-details">
-        <h4>Trabajo Analizado</h4>
+        <h4>Work Analyzed</h4>
         <div class="job-info">
-          <p><strong>Título:</strong> ${analysis.jobTitle || "No disponible"}</p>
-          <p><strong>Empresa:</strong> ${analysis.company || "No disponible"}</p>
-          <p><strong>Ubicación:</strong> ${analysis.location || "No disponible"}</p>
-          ${analysis.salary ? `<p><strong>Salario:</strong> ${analysis.salary}</p>` : ""}
+          <p><strong>Title:</strong> ${analysis.jobTitle || "Not available"}</p>
+          <p><strong>Company:</strong> ${analysis.company || "Not available"}</p>
+          <p><strong>Location:</strong> ${analysis.location || "Not available"}</p>
+          ${analysis.salary ? `<p><strong>Salary:</strong> ${analysis.salary}</p>` : ""}
         </div>
 
-        <h4>Señales de Alerta Detectadas</h4>
+        <h4>Warning Signs Detected</h4>
         <div class="flags-list">
           ${
 						(analysis.flags || [])
@@ -478,18 +478,18 @@ class ScamShieldSidepanel {
             </div>
           `
 							)
-							.join("") || '<p class="no-flags">No se detectaron señales específicas</p>'
+							.join("") || '<p class="no-flags">No specific signals were detected</p>'
 					}
         </div>
 
-        <h4>Análisis IA</h4>
+        <h4>AI Analysis</h4>
         <div class="ai-analysis">
-          <p><strong>Patrón de texto:</strong> ${analysis.aiAnalysis?.textScore ? `${Math.round(analysis.aiAnalysis.textScore * 100)}% sospechoso` : "No analizado"}</p>
-          <p><strong>Verificación de empresa:</strong> ${analysis.aiAnalysis?.companyVerified ? "Verificada ✅" : "No verificada ❌"}</p>
-          <p><strong>Análisis de salario:</strong> ${analysis.aiAnalysis?.salaryRealistic ? "Realista ✅" : "Dudoso ❌"}</p>
+          <p><strong>Text pattern:</strong> ${analysis.aiAnalysis?.textScore ? `${Math.round(analysis.aiAnalysis.textScore * 100)}% suspicious` : "Not analyzed"}</p>
+          <p><strong>Company verification:</strong> ${analysis.aiAnalysis?.companyVerified ? "Verified ✅" : "Not verified ❌"}</p>
+          <p><strong>Salary Analysis:</strong> ${analysis.aiAnalysis?.salaryRealistic ? "Realistic ✅" : "Doubtful ❌"}</p>
         </div>
 
-        <h4>Recomendaciones</h4>
+        <h4>Recommendations</h4>
         <div class="recommendations">
           ${this.getRecommendations(riskLevel)
 						.map(
@@ -506,10 +506,10 @@ class ScamShieldSidepanel {
 
       <div class="modal-actions" style="display: flex; gap: 12px; margin-top: 20px;">
         <button class="btn-secondary" onclick="sidepanel.reportFalsePositive('${analysisId}')" style="flex: 1; padding: 10px; border: 1px solid #dee2e6; background: white; border-radius: 6px; cursor: pointer;">
-          Reportar falso positivo
+          Report false positive
         </button>
         <button class="btn-primary" onclick="sidepanel.reportScam('${analysisId}')" style="flex: 1; padding: 10px; border: none; background: #667eea; color: white; border-radius: 6px; cursor: pointer;">
-          Reportar como estafa
+          Report as scam
         </button>
       </div>
     `;
@@ -526,16 +526,16 @@ class ScamShieldSidepanel {
 		this.updateDetectionsList();
 
 		chrome.storage.local.set({ analyses: {} });
-		this.showNotification("Detecciones eliminadas", "success");
+		this.showNotification("Detections removed", "success");
 	}
 
 	openReportModal() {
-		this.showNotification("Función de reporte próximamente", "info");
+		this.showNotification("Reporting feature coming soon", "info");
 	}
 
 	openStatsModal() {
 		// Implementar modal de estadísticas detalladas
-		this.showNotification("Estadísticas detalladas próximamente", "info");
+		this.showNotification("Detailed statistics coming soon", "info");
 	}
 
 	openHelp() {
@@ -548,13 +548,13 @@ class ScamShieldSidepanel {
 
 	reportScam(analysisId) {
 		// Implementar reporte de estafa
-		this.showNotification("Gracias por reportar esta estafa", "success");
+		this.showNotification("Thank you for reporting this scam.", "success");
 		this.closeModal();
 	}
 
 	reportFalsePositive(analysisId) {
 		// Implementar reporte de falso positivo
-		this.showNotification("Gracias por tu feedback", "success");
+		this.showNotification("Thank you for your feedback.", "success");
 		this.closeModal();
 	}
 
@@ -570,14 +570,14 @@ class ScamShieldSidepanel {
 
 	getRiskText(level) {
 		const texts = {
-			high: "Alto Riesgo",
-			medium: "Riesgo Medio",
-			low: "Seguro",
-			danger: "Peligroso",
-			warning: "Precaución",
-			safe: "Seguro",
+			high: "High Risk",
+			medium: "Medium Risk",
+			low: "Sure",
+			danger: "Dangerous",
+			warning: "Caution",
+			safe: "Sure",
 		};
-		return texts[level] || "Desconocido";
+		return texts[level] || "Stranger";
 	}
 
 	getActivityIcon(type) {
@@ -600,27 +600,27 @@ class ScamShieldSidepanel {
 		if (days > 0) return `${days}d`;
 		if (hours > 0) return `${hours}h`;
 		if (minutes > 0) return `${minutes}m`;
-		return "ahora";
+		return "now";
 	}
 
 	getRecommendations(riskLevel) {
 		const recommendations = {
 			high: [
-				{ icon: "🚫", text: "NO apliques a este trabajo" },
-				{ icon: "📞", text: "NO proporciones información personal" },
-				{ icon: "💰", text: "NO pagues ninguna tarifa" },
-				{ icon: "🕵️", text: "Investiga la empresa independientemente" },
+				{ icon: "🚫", text: "Do NOT apply for this job" },
+				{ icon: "📞", text: "Do NOT provide personal information" },
+				{ icon: "💰", text: "Do NOT pay any fees" },
+				{ icon: "🕵️", text: "Research the company independently" },
 			],
 			medium: [
-				{ icon: "🔍", text: "Investiga más antes de aplicar" },
-				{ icon: "🏢", text: "Verifica que la empresa existe" },
-				{ icon: "📧", text: "Usa un email secundario para aplicar" },
-				{ icon: "❓", text: "Haz preguntas específicas en la entrevista" },
+				{ icon: "🔍", text: "Do more research before applying" },
+				{ icon: "🏢", text: "Verify that the company exists" },
+				{ icon: "📧", text: "Use a secondary email to apply" },
+				{ icon: "❓", text: "Ask specific questions in the interview" },
 			],
 			low: [
-				{ icon: "✅", text: "Trabajo parece legítimo" },
-				{ icon: "📋", text: "Revisa términos y condiciones" },
-				{ icon: "🤝", text: "Procede con precaución normal" },
+				{ icon: "✅", text: "Work seems legitimate" },
+				{ icon: "📋", text: "Review terms and conditions" },
+				{ icon: "🤝", text: "Proceed with normal caution" },
 			],
 		};
 
@@ -669,8 +669,8 @@ class ScamShieldSidepanel {
 			if (this.currentTab?.isSupported && Math.random() < 0.1) {
 				this.addActivityItem({
 					type: "scanning",
-					title: "Monitoreando página",
-					description: "Buscando nuevas ofertas de trabajo...",
+					title: "Monitoring page",
+					description: "Looking for new job offers...",
 					timestamp: Date.now(),
 				});
 			}
